@@ -6,30 +6,32 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const app = express();
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-const cors = require("cors");
+// ✅ CORS setup
 app.use(cors({
-  origin: ["https://observationm.onrender.com"], // ✅ Your frontend URL
+  origin: ["https://observationm.onrender.com"], // Your React frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
 app.use(helmet());
 app.use(morgan('dev'));
-app.use(express.json());    // parse JSON bodies
 
 app.get('/', (_req, res) => res.send('Observation API is running'));
 
+// Routes
 app.use('/api/observations', require('./routes/observations'));
 
-// const PORT = process.env.PORT || 5000;
-// const PORT = 'mongodb+srv://admin:admin@crm.emoz4sc.mongodb.net/Observation'|| 5000;
+// ✅ Use Render's PORT
+const PORT = process.env.PORT || 5000;
 
 mongoose
-  .connect('mongodb+srv://admin:admin@crm.emoz4sc.mongodb.net/Observation')
+  .connect(process.env.MONGO_URI || 'mongodb+srv://admin:admin@crm.emoz4sc.mongodb.net/Observation')
   .then(() => {
     console.log('MongoDB connected');
-    app.listen(5000, () => console.log(`API listening on :${5000}`));
+    app.listen(PORT, () => console.log(`API listening on port ${PORT}`));
   })
   .catch(err => console.error('Mongo connect error:', err));
