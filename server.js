@@ -6,10 +6,6 @@ const cors = require('cors');
 
 const app = express();
 const path = require('path');
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 // Middleware
 app.use(express.json({ limit: '10mb' }));
@@ -27,6 +23,14 @@ app.get('/', (_req, res) => res.send('Observation API is running'));
 // Routes
 app.use('/api/observations', require('./routes/observations'));
 
+// Serve React build for production
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Catch-all route for React SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 // ✅ Hardcode Mongo URI & PORT
 const PORT = 5000;
 const MONGO_URI = 'mongodb+srv://admin:admin@crm.emoz4sc.mongodb.net/Observation';
@@ -39,4 +43,5 @@ mongoose
     app.listen(PORT, () => console.log(`✅ API running on port ${PORT}`));
   })
   .catch(err => console.error('❌ MongoDB connection error:', err));
+
 
