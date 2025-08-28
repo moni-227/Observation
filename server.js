@@ -23,7 +23,7 @@ app.get('/', (_req, res) => res.send('Observation API is running'));
 app.use('/api/observations', require('./routes/observations'));
 
 // ✅ Hardcode Mongo URI & PORT
-const PORT = 5000;
+const PORT = 10000;
 const MONGO_URI = 'mongodb+srv://admin:admin@crm.emoz4sc.mongodb.net/Observation';
 
 // Connect MongoDB and start server
@@ -34,4 +34,5 @@ mongoose
     app.listen(PORT, () => console.log(`✅ API running on port ${PORT}`));
   })
   .catch(err => console.error('❌ MongoDB connection error:', err));
+
 
