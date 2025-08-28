@@ -31,7 +31,7 @@ app.get('/*', (req, res) => {
 
 // ✅ MongoDB & Server
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = 'mongodb+srv://admin:admin@crm.emoz4sc.mongodb.net/Observation';
+const MONGO_URI = 'mongodb+srv://adventistech2025:XOGhPBZxi0gDSPNO@cluster0.awnrusw.mongodb.net/OptiMES40';
 
 mongoose
   .connect(MONGO_URI)
@@ -40,4 +40,5 @@ mongoose
     app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
   })
   .catch(err => console.error('❌ MongoDB connection error:', err));
+
 
