@@ -25,8 +25,6 @@ app.use('/api/observations', require('./routes/observations'));
 
 // Serve React build for production
 app.use(express.static(path.join(__dirname, 'build')));
-
-// Catch-all route for React SPA
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
@@ -43,5 +41,6 @@ mongoose
     app.listen(PORT, () => console.log(`✅ API running on port ${PORT}`));
   })
   .catch(err => console.error('❌ MongoDB connection error:', err));
+
 
 
