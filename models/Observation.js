@@ -13,8 +13,11 @@ const ObservationSchema = new mongoose.Schema(
     preventiveMeasures: { type: String, required: true },
     recommendations: { type: String, required: true },
      capturedImage: { type: String }, // Base64 image
+    latitude: { type: Number },      // ✅ new field
+    longitude: { type: Number }
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model('Observation', ObservationSchema);
+
