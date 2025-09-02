@@ -714,12 +714,35 @@ export default function ObservationForm({ onSuccess }) {
     }
   }, [cameraOn]);
 
-  const handleCaptureImage = () => {
-    if (!canvasRef.current) return;
-    const dataURL = canvasRef.current.toDataURL("image/png");
-    setForm({ ...form, capturedImage: dataURL });
-    alert("📸 Image captured!");
-  };
+  // const handleCaptureImage = () => {
+  //   if (!canvasRef.current) return;
+  //   const dataURL = canvasRef.current.toDataURL("image/png");
+  //   setForm({ ...form, capturedImage: dataURL });
+  //   alert("📸 Image captured!");
+  // };
+// Capture current frame as image + location
+const handleCaptureImage = () => {
+  if (!canvasRef.current) return;
+  const dataURL = canvasRef.current.toDataURL("image/png");
+
+  // Get geolocation
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+      setForm({
+        ...form,
+        capturedImage: dataURL,
+        latitude,
+        longitude,
+      });
+      alert("📸 Image & Location captured!");
+    },
+    (err) => {
+      alert("⚠️ Failed to get location: " + err.message);
+      setForm({ ...form, capturedImage: dataURL });
+    }
+  );
+};
 
   const styles = {
     container: { margin: "0 auto", padding: "40px 20px", background: "#f4f6f9" },
@@ -852,10 +875,22 @@ export default function ObservationForm({ onSuccess }) {
               <img
                 src={form.capturedImage}
                 alt="Captured"
-                style={{ display: "block", width: "200px", marginTop: "10px", borderRadius: "10px" }}
+                style={{
+                  display: "block",
+                  width: "200px",
+                  marginTop: "10px",
+                  borderRadius: "10px",
+                  border: "2px solid #5b708b",
+                }}
               />
+              {form.latitude && form.longitude && (
+                <p>
+                  🌍 Location: {form.latitude.toFixed(6)}, {form.longitude.toFixed(6)}
+                </p>
+              )}
             </div>
           )}
+
 
           <div className="text-end mt-4">
             <button type="submit" style={styles.button} className="animate__animated animate__pulse animate__infinite">
