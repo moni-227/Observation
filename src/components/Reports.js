@@ -249,7 +249,7 @@ function Reports({ refresh }) {
                 textAlign: "center",
               }}
             >
-              Observation Details
+              Observation capturedImage
             </div>
 
             {/* Image */}
@@ -307,3 +307,4 @@ function Reports({ refresh }) {
 }
 
 export default Reports;
+
