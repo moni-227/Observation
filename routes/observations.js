@@ -14,6 +14,8 @@ const Observation = require('../models/Observation');
 
 router.post("/", async (req, res) => {
   try {
+    console.log("📥 Incoming data:", req.body);  // <-- Debug line
+
     let { latitude, longitude } = req.body;
 
     let address = null;
@@ -56,4 +58,5 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 
