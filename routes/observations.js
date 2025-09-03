@@ -3,14 +3,39 @@ const router = express.Router();
 const Observation = require('../models/Observation');
 
 // Create
-router.post('/', async (req, res) => {
+// router.post('/', async (req, res) => {
+//   try {
+//     const obs = await Observation.create(req.body);
+//     res.status(201).json(obs);
+//   } catch (err) {
+//     res.status(400).json({ message: err.message });
+
+//   });
+
+router.post("/", async (req, res) => {
   try {
-    const obs = await Observation.create(req.body);
+    let { latitude, longitude } = req.body;
+
+    let address = null;
+    if (latitude && longitude) {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+      );
+      const data = await response.json();
+      address = data.display_name; // human-readable address
+    }
+
+    const obs = await Observation.create({
+      ...req.body,
+      resolvedAddress: address, // store it in DB
+    });
+
     res.status(201).json(obs);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
+
 
 // Read all (simple list)
 router.get('/', async (_req, res) => {
@@ -30,3 +55,4 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
