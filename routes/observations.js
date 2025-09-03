@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Observation = require('../models/Observation');
-const fetch = require("node-fetch"); // ensure installed
 // Create
 router.post('/', async (req, res) => {
   try {
@@ -61,6 +60,7 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 
 
 
