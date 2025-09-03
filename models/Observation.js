@@ -14,10 +14,13 @@ const ObservationSchema = new mongoose.Schema(
     recommendations: { type: String, required: true },
      capturedImage: { type: String }, // Base64 image
     latitude: { type: Number },      // ✅ new field
-    longitude: { type: Number }
+    longitude: { type: Number },
+    resolvedAddress: { type: String }, // 📍 auto-generated from lat/lon
+
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model('Observation', ObservationSchema);
+
 
