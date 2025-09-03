@@ -37,6 +37,7 @@ router.post("/", async (req, res) => {
 });
 
 
+
 // Read all (simple list)
 router.get('/', async (_req, res) => {
   const all = await Observation.find().sort({ createdAt: -1 });
