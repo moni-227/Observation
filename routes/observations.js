@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Observation = require('../models/Observation');
+
 // Create
 router.post('/', async (req, res) => {
   try {
@@ -8,39 +9,8 @@ router.post('/', async (req, res) => {
     res.status(201).json(obs);
   } catch (err) {
     res.status(400).json({ message: err.message });
-
-  });
-
-// router.post("/", async (req, res) => {
-//   try {
-//     console.log("📥 Incoming data:", req.body);
-
-//     let { latitude, longitude } = req.body;
-//     let address = null;
-
-//     if (latitude && longitude) {
-//       const response = await fetch(
-//         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-//       );
-//       const data = await response.json();
-//       address = data.display_name || null;
-//     }
-
-//     const obs = await Observation.create({
-//       ...req.body,
-//       resolvedAddress: address,
-//     });
-
-//     res.status(201).json(obs);
-//   } catch (err) {
-//     console.error("❌ Save error:", err);
-//     if (err.name === "ValidationError") {
-//       return res.status(400).json({ message: "Validation failed", errors: err.errors });
-//     }
-//     res.status(400).json({ message: err.message });
-//   }
-// });
-
+  }
+});
 
 // Read all (simple list)
 router.get('/', async (_req, res) => {
@@ -60,8 +30,3 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-
