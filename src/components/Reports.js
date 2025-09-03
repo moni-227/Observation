@@ -98,21 +98,21 @@ function Reports({ refresh }) {
   };
 
   return (
-    <div className="card shadow-lg animate__animated animate__fadeInUp" style={{ margin: "10px" }}>
+    <div className="card shadow-lg animate__animated animate__fadeInUp">
       {/* Header */}
       <div
         className="card-header text-white"
         style={{ background: "linear-gradient(90deg, #55a669ff, #598892ff)" }}
       >
-        <h4 className="mb-0" style={{ fontSize: "1.2rem" }}>
+        <h4 className="mb-0">
           <i className="bi bi-table me-2"></i> Observation Reports
         </h4>
       </div>
 
       {/* Table */}
-      <div className="card-body" style={{ padding: "0.5rem" }}>
-        <div style={{ overflowX: "auto" }}>
-          <table className="table table-striped table-hover align-middle" style={{ minWidth: "800px" }}>
+      <div className="card-body">
+        <div className="table-responsive">
+          <table className="table table-striped table-hover align-middle">
             <thead className="table-dark">
               <tr>
                 <th>#</th>
@@ -142,7 +142,24 @@ function Reports({ refresh }) {
                       {obs.capturedImage ? (
                         <button
                           onClick={() => setSelectedObs(obs)}
-                          className="view-image-btn"
+                          style={{
+                            padding: "6px 12px",
+                            backgroundColor: "#598892ff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontWeight: "500",
+                            transition: "background-color 0.2s, transform 0.2s",
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "#55a669ff";
+                            e.currentTarget.style.transform = "scale(1.05)";
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "#598892ff";
+                            e.currentTarget.style.transform = "scale(1)";
+                          }}
                         >
                           View Image
                         </button>
@@ -150,6 +167,7 @@ function Reports({ refresh }) {
                         "No Image"
                       )}
                     </td>
+
                   </tr>
                 ))
               ) : (
@@ -164,139 +182,128 @@ function Reports({ refresh }) {
         </div>
       </div>
 
-      {/* Popup */}
+      {/* Popup Card with attractive header */}
       {selectedObs && (
         <div
-          className="popup-container"
+          className="popup-container animate__animated animate__fadeIn"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.85)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start", // change from center to flex-start
+            paddingTop: "50px",       // push popup slightly down
+            zIndex: 1000,
+          }}
           onClick={() => setSelectedObs(null)}
         >
-          <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-            <button className="popup-close" onClick={() => setSelectedObs(null)}>✕</button>
-            <div className="popup-header">Observation Details</div>
-            <div className="popup-image-container">
-              <img src={selectedObs.capturedImage} alt="Captured" className="popup-image" />
-              <div className="popup-overlay">
+          <div
+            className="popup-card"
+            style={{
+              position: "relative",
+              width: "80vh",
+              maxWidth: "90%",
+              borderRadius: "5px",
+              overflow: "hidden",
+              cursor: "default",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
+              animation: "zoomIn 0.35s ease-in-out",
+              backgroundColor: "#f7f7f7",
+            }}
+            onClick={(e) => e.stopPropagation()} // prevent closing on card click
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedObs(null)}
+              style={{
+                position: "absolute",
+                top: "12px",
+                right: "12px",
+                background: "rgba(255,0,0,0.85)",
+                color: "white",
+                border: "none",
+                borderRadius: "50%",
+                width: "36px",
+                height: "36px",
+                fontSize: "20px",
+                cursor: "pointer",
+                zIndex: 10,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Header Section */}
+            <div
+              style={{
+                background: "linear-gradient(90deg, #55a669ff, #598892ff)",
+                color: "white",
+                padding: "16px",
+                fontSize: "18px",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Observation Details
+            </div>
+
+            {/* Image */}
+            <div style={{ position: "relative" }}>
+              <img
+                src={selectedObs.capturedImage}
+                alt="Captured"
+                style={{
+                  width: "100%", height: "auto", display: "block",
+                  objectFit: "cover",
+                }}
+              />
+              {/* Overlay Info */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "0",
+                  left: "0",
+                  right: "0",
+                  background:
+                    "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0))",
+                  color: "#fff",
+                  padding: "14px 16px",
+                  fontSize: "14px",
+                  lineHeight: "1.4",
+                }}
+              >
                 🌍 <b>Latitude:</b> {selectedObs.latitude?.toFixed(6) || "N/A"} |{" "}
                 <b>Longitude:</b> {selectedObs.longitude?.toFixed(6) || "N/A"} <br />
                 📍 <b>Address:</b> {selectedObs.resolvedAddress || "Not available"}
               </div>
             </div>
           </div>
+
+          {/* Animations */}
+          <style>
+            {`
+              @keyframes zoomIn {
+                from { transform: scale(0.7); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+              }
+              .animate__fadeIn {
+                animation: fadeIn 0.25s ease-in-out;
+              }
+              @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+              }
+            `}
+          </style>
         </div>
       )}
-
-      {/* Responsive & Animation Styles */}
-      <style>
-        {`
-          .view-image-btn {
-            padding: 6px 12px;
-            background-color: #598892ff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: 0.2s;
-          }
-          .view-image-btn:hover {
-            background-color: #55a669ff;
-            transform: scale(1.05);
-          }
-
-          /* Popup */
-          .popup-container {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 5% 10px;
-            z-index: 1000;
-            overflow-y: auto;
-          }
-          .popup-card {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 8px;
-            background-color: #f7f7f7;
-            overflow: hidden;
-            animation: zoomIn 0.35s ease-in-out;
-          }
-          .popup-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(255,0,0,0.85);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 10;
-          }
-          .popup-header {
-            background: linear-gradient(90deg, #55a669ff, #598892ff);
-            color: white;
-            padding: 16px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-align: center;
-          }
-          .popup-image-container {
-            position: relative;
-          }
-          .popup-image {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-          }
-          .popup-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
-            color: #fff;
-            padding: 12px 16px;
-            font-size: 0.85rem;
-            line-height: 1.3;
-          }
-
-          @keyframes zoomIn {
-            from { transform: scale(0.7); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-          }
-
-          /* Table responsiveness */
-          @media (max-width: 768px) {
-            table {
-              font-size: 0.85rem;
-            }
-          }
-          @media (max-width: 480px) {
-            .popup-card {
-              max-width: 95%;
-            }
-            .popup-header {
-              font-size: 1rem;
-            }
-            .popup-overlay {
-              font-size: 0.75rem;
-            }
-            table {
-              min-width: 600px;
-            }
-          }
-        `}
-      </style>
     </div>
   );
 }
 
 export default Reports;
-
