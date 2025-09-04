@@ -55,7 +55,11 @@ function HomeChart() {
     }
   };
 
-  const COLORS = ["#4e6788", "#55a669", "#9f9c3d", "#598892", "#a56799"];
+  // 🎨 Different color palettes
+  // 🎨 Different color palettes
+const BAR_COLORS = ["#e3746aff", "#846ebaff", "#88b04b", "#ffa500", "#009688"]; // Bold
+const PIE_COLORS = ["#589186ff", "#f9e79f", "#f5b7b1", "#d2b4de", "#aed6f1"]; // Pastels
+
 
   // custom label for pie
   const renderCustomizedLabel = ({ percent }) =>
@@ -67,10 +71,7 @@ function HomeChart() {
       <div className="col-lg-6 col-md-12 mb-4">
         <div
           className="card shadow-lg border-0 animate__animated animate__fadeInLeft"
-          style={{
-            borderRadius: "5px",
-            overflow: "hidden",
-          }}
+          style={{ borderRadius: "5px", overflow: "hidden" }}
         >
           <div
             className="card-header text-white"
@@ -91,18 +92,14 @@ function HomeChart() {
                 <Tooltip
                   contentStyle={{ borderRadius: "10px", background: "#fff" }}
                 />
-                <Bar
-                  dataKey="value"
-                  fill="url(#colorDept)"
-                  radius={[8, 8, 0, 0]}
-                  animationDuration={1200}
-                />
-                <defs>
-                  <linearGradient id="colorDept" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4e6788" stopOpacity={0.9} />
-                    <stop offset="95%" stopColor="#6c8dad" stopOpacity={0.7} />
-                  </linearGradient>
-                </defs>
+                <Bar dataKey="value" radius={[8, 8, 0, 0]} animationDuration={1200}>
+                  {deptData.map((entry, index) => (
+                    <Cell
+                      key={`bar-${index}`}
+                      fill={BAR_COLORS[index % BAR_COLORS.length]} // ✅ unique palette for bars
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -113,10 +110,7 @@ function HomeChart() {
       <div className="col-lg-6 col-md-12 mb-4">
         <div
           className="card shadow-lg border-0 animate__animated animate__fadeInRight"
-          style={{
-            borderRadius: "5px",
-            overflow: "hidden",
-          }}
+          style={{ borderRadius: "5px", overflow: "hidden" }}
         >
           <div
             className="card-header text-white"
@@ -144,7 +138,7 @@ function HomeChart() {
                   {locData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
+                      fill={PIE_COLORS[index % PIE_COLORS.length]} // ✅ different palette for pie
                       stroke="#fff"
                       strokeWidth={2}
                     />
@@ -162,5 +156,6 @@ function HomeChart() {
     </div>
   );
 }
+
 
 export default HomeChart;
