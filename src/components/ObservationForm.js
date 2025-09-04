@@ -1830,7 +1830,7 @@ export default function ObservationForm({ onSuccess }) {
   const streamRef = useRef(null);
   const animationRef = useRef(null);
 
-  // ✅ Prefill observer name from logged-in user
+  // Prefill observer name from logged-in user
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -1846,17 +1846,11 @@ export default function ObservationForm({ onSuccess }) {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.date) newErrors.date = "Date is required";
-    if (!form.observerName.trim()) newErrors.observerName = "Observer name is required";
-    if (!form.department.trim()) newErrors.department = "Department is required";
-    if (!form.designation.trim()) newErrors.designation = "Designation is required";
-    if (!form.location.trim()) newErrors.location = "Location is required";
-    if (!form.details.trim()) newErrors.details = "Observation details are required";
-    if (!form.immediateAction.trim()) newErrors.immediateAction = "Immediate action is required";
-    if (!form.rootCauseAnalysis.trim()) newErrors.rootCauseAnalysis = "Root cause analysis is required";
-    if (!form.preventiveMeasures.trim()) newErrors.preventiveMeasures = "Preventive measures are required";
-    if (!form.recommendations.trim()) newErrors.recommendations = "Recommendations are required";
-
+    Object.keys(form).forEach((key) => {
+      if (key !== "capturedImage" && key !== "latitude" && key !== "longitude" && !form[key].toString().trim()) {
+        newErrors[key] = `${key.replace(/([A-Z])/g, " $1")} is required`;
+      }
+    });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -1872,7 +1866,7 @@ export default function ObservationForm({ onSuccess }) {
       alert("✅ Observation submitted successfully");
       setForm({
         date: "",
-        observerName: form.observerName, // keep prefilled observer name
+        observerName: form.observerName,
         department: "",
         designation: "",
         location: "",
@@ -1977,6 +1971,23 @@ export default function ObservationForm({ onSuccess }) {
     previewImage: { display: "block", width: "100%", maxWidth: "220px", marginTop: "10px", borderRadius: "10px", border: "2px solid #5b708b" },
   };
 
+  // Field definitions
+  const inputFields = [
+    { label: "Date", type: "date", name: "date", placeholder: "Select date" },
+    { label: "Observer Name", type: "text", name: "observerName", placeholder: "Enter observer name" },
+    { label: "Department", type: "text", name: "department", placeholder: "Enter department" },
+    { label: "Designation", type: "text", name: "designation", placeholder: "Enter designation" },
+    { label: "Location", type: "text", name: "location", placeholder: "Enter observation location" },
+  ];
+
+  const textareaFields = [
+    { label: "Details", type: "textarea", name: "details", placeholder: "Enter observation details" },
+    { label: "Immediate Action", type: "textarea", name: "immediateAction", placeholder: "Enter immediate action taken" },
+    { label: "Root Cause Analysis", type: "textarea", name: "rootCauseAnalysis", placeholder: "Enter root cause analysis" },
+    { label: "Preventive Measures", type: "textarea", name: "preventiveMeasures", placeholder: "Enter preventive measures" },
+    { label: "Recommendations", type: "textarea", name: "recommendations", placeholder: "Enter recommendations" },
+  ];
+
   return (
     <div style={styles.container}>
       <div style={styles.card} className="animate__animated animate__fadeInUp">
@@ -1986,13 +1997,7 @@ export default function ObservationForm({ onSuccess }) {
 
         <form onSubmit={handleSubmit} style={{ padding: "15px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
-            {[
-              { label: "Date", type: "date", name: "date" },
-              { label: "Observer Name", type: "text", name: "observerName", placeholder: "Enter Observer Name" },
-              { label: "Department", type: "text", name: "department", placeholder: "Enter Department" },
-              { label: "Designation", type: "text", name: "designation", placeholder: "Enter Designation" },
-              { label: "Location", type: "text", name: "location", placeholder: "Enter Location" },
-            ].map((field, index) => (
+            {inputFields.map((field, index) => (
               <div style={styles.formGroup} key={index}>
                 <label style={styles.label}>{field.label}</label>
                 <input
@@ -2001,28 +2006,28 @@ export default function ObservationForm({ onSuccess }) {
                   value={form[field.name]}
                   onChange={handleChange}
                   style={styles.input}
-                  placeholder={field.placeholder || ""}
+                  placeholder={field.placeholder}
                 />
                 {errors[field.name] && <div style={styles.errorText}>{errors[field.name]}</div>}
               </div>
             ))}
           </div>
 
-          {/* Rest of form: textarea fields */}
-          {["Details","ImmediateAction","RootCauseAnalysis","PreventiveMeasures","Recommendations"].map((fieldName, idx) => (
+          {textareaFields.map((field, idx) => (
             <div style={styles.formGroup} key={idx}>
-              <label style={styles.label}>{fieldName.replace(/([A-Z])/g, " $1")}</label>
+              <label style={styles.label}>{field.label}</label>
               <textarea
-                name={fieldName}
-                value={form[fieldName]}
+                name={field.name}
+                value={form[field.name]}
                 onChange={handleChange}
                 style={styles.textarea}
+                placeholder={field.placeholder}
               />
-              {errors[fieldName] && <div style={styles.errorText}>{errors[fieldName]}</div>}
+              {errors[field.name] && <div style={styles.errorText}>{errors[field.name]}</div>}
             </div>
           ))}
 
-          {/* Camera */}
+          {/* Camera Buttons */}
           <div style={styles.buttonGroup}>
             <button type="button" onClick={handleOpenCamera} style={styles.button}>
               <i className={`fa ${cameraOn ? "fa-times" : "fa-camera"} me-2`}></i>
