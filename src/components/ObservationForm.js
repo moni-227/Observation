@@ -1974,7 +1974,7 @@ export default function ObservationForm({ onSuccess }) {
   // Field definitions
   const inputFields = [
     { label: "Date", type: "date", name: "date", placeholder: "Select date" },
-    { label: "Observer Name", type: "text", name: "observerName", placeholder: "Enter observer name" },
+    { label: "Observer Name", type: "text", name: "observerName", placeholder: "Enter observer name", readOnly: true },
     { label: "Department", type: "text", name: "department", placeholder: "Enter department" },
     { label: "Designation", type: "text", name: "designation", placeholder: "Enter designation" },
     { label: "Location", type: "text", name: "location", placeholder: "Enter observation location" },
@@ -2005,8 +2005,14 @@ export default function ObservationForm({ onSuccess }) {
                   name={field.name}
                   value={form[field.name]}
                   onChange={handleChange}
-                  style={styles.input}
+                  style={{
+                    ...styles.input,
+                    backgroundColor: field.readOnly ? "#e0e0e0" : "#fff", // light gray for read-only
+                    cursor: field.readOnly ? "not-allowed" : "text",
+                  }}
                   placeholder={field.placeholder}
+                  readOnly={field.readOnly || false}
+
                 />
                 {errors[field.name] && <div style={styles.errorText}>{errors[field.name]}</div>}
               </div>
