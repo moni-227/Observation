@@ -610,7 +610,7 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto d-flex align-items-center">
+          <ul className="navbar-nav ms-auto d-flex align-items-start">
             <li className="nav-item mx-2">
               <NavLink className="nav-link d-flex align-items-center" to="/home">
                 <i className="bi bi-house-door me-1"></i> Home
