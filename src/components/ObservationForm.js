@@ -2060,5 +2060,4 @@ export default function ObservationForm({ onSuccess }) {
       <video ref={videoRef} autoPlay playsInline style={{ display: "none" }} />
     </div>
   );
-
 }
