@@ -16,6 +16,10 @@ app.use(cors({
 }));
 app.use(helmet());
 app.use(morgan('dev'));
+const personRoutes = require("./routes/person");
+
+// ✅ API Routes
+app.use("/api/persons", personRoutes);
 
 // ✅ API Routes
 app.use('/api/observations', require('./routes/observations'));
@@ -40,5 +44,6 @@ mongoose
     app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
   })
   .catch(err => console.error('❌ MongoDB connection error:', err));
+
 
 
