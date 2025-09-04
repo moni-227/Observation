@@ -10,3 +10,6 @@ export const createObservation = (data) => API.post("/observations", data);
  
 
 
+export const loginUser = (credentials) => API.post("/persons/login", credentials);
+export const getPersons = () => API.get("/persons"); // ✅ fixed
+
